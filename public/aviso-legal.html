@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aviso Legal de SinFiltro, espacio anónimo para compartir cómo te sientes.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0d0d0d">
+  <title>Aviso Legal — SinFiltro</title>
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url('fonts/inter-variable-latin.woff2') format('woff2');
+    }
+    :root {
+      --bg:       #0d0d0d;
+      --surface:  #1a1a1a;
+      --surface2: #222;
+      --border:   #2e2e2e;
+      --texto:    #e0e0e0;
+      --muted:    #888;
+      --morado:   #8b84ff;
+      --morado-b: #6c63ff;
+      --verde:    #4CAF50;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body {
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.7;
+    }
+    a { color: var(--morado); }
+    a:hover { color: var(--texto); }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--morado);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+    .skip-link {
+      position:absolute; left:50%; top:0;
+      transform: translate(-50%,-120%);
+      background: var(--morado-b); color:#fff;
+      font-weight:600; font-size:0.9rem;
+      padding:.75rem 1.5rem; border-radius:0 0 10px 10px;
+      text-decoration:none; z-index:200; transition:transform .2s;
+    }
+    .skip-link:focus { transform: translate(-50%,0); color:#fff; }
+
+    header {
+      border-bottom:1px solid var(--border);
+      padding:24px 20px 20px; text-align:center;
+      position:sticky; top:0; background:var(--bg); z-index:10;
+    }
+    header .marca {
+      font-size:1.05rem; font-weight:700; letter-spacing:-0.3px;
+      color:var(--texto); text-decoration:none; display:inline-block;
+    }
+    header .volver {
+      display:block; margin-top:6px;
+      font-size:0.82rem; color:var(--muted); text-decoration:none;
+    }
+    header .volver:hover { color:var(--texto); }
+
+    .hero { max-width:760px; margin:0 auto; padding:36px 16px 8px; }
+    .hero-label {
+      font-size:0.7rem; font-weight:600; letter-spacing:1.5px;
+      text-transform:uppercase; color:var(--morado); margin-bottom:8px;
+    }
+    .hero h1 { font-size:clamp(1.7rem,6vw,2.3rem); font-weight:700; letter-spacing:-0.5px; }
+    .hero p { color:var(--muted); font-size:0.86rem; margin-top:8px; }
+
+    main { max-width:760px; margin:0 auto; padding:20px 16px 60px; }
+
+    .card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:20px 22px; margin-bottom:14px;
+    }
+    .card h2 {
+      font-size:1.02rem; font-weight:700; color:var(--morado);
+      margin-bottom:14px; padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .card h3 { font-size:0.92rem; font-weight:600; margin:16px 0 5px; color:var(--texto); }
+    .card p, .card li { font-size:0.9rem; color:var(--muted); }
+    .card ul { padding-left:1.3rem; margin-top:.5rem; }
+    .card li { margin-bottom:.35rem; }
+    .card strong { color:var(--texto); }
+    .card code {
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:.85em; background:var(--surface2);
+      border:1px solid var(--border); border-radius:5px;
+      padding:.1em .38em; color:var(--morado);
+    }
+    .destacado {
+      background:rgba(108,99,255,0.10);
+      border-left:3px solid var(--morado-b);
+      border-radius:0 10px 10px 0;
+      padding:.9rem 1.15rem; margin:1rem 0;
+      font-size:.88rem; color:var(--muted);
+    }
+    .destacado strong { color:var(--texto); }
+    .ayuda {
+      background:rgba(76,175,80,0.09);
+      border-left:3px solid var(--verde);
+      border-radius:0 10px 10px 0;
+      padding:.9rem 1.15rem; margin:1rem 0;
+      font-size:.88rem; color:var(--muted);
+    }
+    .ayuda strong { color:var(--texto); }
+
+    .update-box {
+      text-align:center; padding:18px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; font-size:.8rem; color:var(--muted); margin-top:22px;
+    }
+    footer {
+      text-align:center; padding:26px 16px;
+      font-size:.78rem; color:var(--muted);
+      border-top:1px solid var(--border);
+    }
+    footer a { color:var(--muted); text-decoration:underline; text-underline-offset:3px; padding:4px; }
+    footer a:hover { color:var(--texto); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { transition-duration:.01ms !important; animation-duration:.01ms !important; }
+    }
+    @media (max-width:600px) {
+      .card { padding:16px; }
+      main { padding:16px 12px 48px; }
+      .hero { padding:28px 12px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#contenido" class="skip-link">Saltar al contenido principal</a>
+
+<header>
+  <a href="index.html" class="marca">SinFiltro</a>
+  <a href="index.html" class="volver">← Volver al inicio</a>
+</header>
+<div class="hero">
+  <p class="hero-label">Legal</p>
+  <h1>Aviso Legal</h1>
+  <p>Última actualización: agosto de 2026 · Conforme a la Ley 34/2002 (LSSI-CE) y normativa vigente</p>
+</div>
+
+<main id="contenido">
+
+  <!-- 1. Titular -->
+  <div class="card">
+    <h2>🧑‍💼 1. Datos identificativos del titular</h2>
+    <p>En cumplimiento del artículo 10 de la <strong>Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE)</strong>:</p>
+    <div class="destacado">
+      <strong>Nombre:</strong> Marcos Martínez<br>
+      <strong>Correo electrónico:</strong> <a href="mailto:marcos.dev.martinez@gmail.com">marcos.dev.martinez@gmail.com</a><br>
+      <strong>Ubicación:</strong> Valencia, España<br>
+      <strong>Naturaleza:</strong> Persona física — proyecto personal, sin actividad comercial
+    </div>
+  </div>
+
+  <!-- 2. Objeto -->
+  <div class="card">
+    <h2>🌐 2. Objeto del sitio</h2>
+    <p>
+      <strong>SinFiltro</strong> es un espacio donde cualquier persona puede publicar de
+      forma anónima un mensaje breve sobre cómo se siente, y leer los de otras. El acceso
+      es gratuito y no requiere registro.
+    </p>
+    <div class="ayuda">
+      <strong>Esta web no presta servicios sanitarios, psicológicos ni de asesoramiento,
+      y no sustituye la ayuda profesional.</strong> Si estás pasando por un momento
+      difícil, habla con alguien de confianza o con un profesional. En España, el
+      <strong>teléfono 024</strong> de atención a la conducta suicida es gratuito,
+      confidencial y funciona las 24 horas.
+    </div>
+  </div>
+
+  <!-- 3. Condiciones de uso -->
+  <div class="card">
+    <h2>📝 3. Condiciones de uso</h2>
+    <p>Al publicar en este sitio te comprometes a:</p>
+    <ul>
+      <li>No incluir datos que te identifiquen a ti o a terceros.</li>
+      <li>No publicar insultos, amenazas, acoso ni contenido que incite al odio.</li>
+      <li>No difundir contenido que promueva conductas autolesivas.</li>
+      <li>No usar el sitio con fines publicitarios, fraudulentos o ilícitos.</li>
+    </ul>
+    <p style="margin-top:.75rem">
+      El titular podrá retirar sin previo aviso cualquier mensaje que incumpla lo anterior.
+      Puedes avisar de un contenido inadecuado escribiendo a
+      <a href="mailto:marcos.dev.martinez@gmail.com">marcos.dev.martinez@gmail.com</a>.
+    </p>
+  </div>
+
+  <!-- 4. Responsabilidad -->
+  <div class="card">
+    <h2>⚠️ 4. Exención de responsabilidad</h2>
+
+    <h3>Contenidos publicados por usuarios:</h3>
+    <p>
+      Los mensajes los escriben las personas que visitan el sitio y no reflejan la opinión
+      del titular. Conforme al <strong>artículo 16 de la LSSI-CE</strong>, el titular no
+      es responsable de los contenidos ajenos que almacena, siempre que no tenga
+      conocimiento efectivo de su ilicitud y, en cuanto lo tenga, actúe con diligencia
+      para retirarlos.
+    </p>
+
+    <h3>Disponibilidad:</h3>
+    <p>
+      No se garantiza la disponibilidad continua e ininterrumpida del sitio. El titular
+      se reserva el derecho a suspender, modificar o cerrar el servicio sin previo aviso.
+    </p>
+  </div>
+
+  <!-- 5. Propiedad intelectual -->
+  <div class="card">
+    <h2>©️ 5. Propiedad intelectual</h2>
+    <p>
+      El diseño, el código fuente y la estructura del sitio son titularidad de
+      <strong>Marcos Martínez</strong> y están protegidos por la legislación española e
+      internacional sobre propiedad intelectual. Los mensajes publicados siguen siendo de
+      sus autores, que autorizan su publicación en este sitio al pulsar «Publicar».
+    </p>
+  </div>
+
+  <!-- 6. Datos y cookies -->
+  <div class="card">
+    <h2>🔒 6. Protección de datos y cookies</h2>
+    <p>
+      El tratamiento de datos se rige por la
+      <a href="politica-privacidad.html"><strong>Política de Privacidad</strong></a>,
+      conforme al <strong>RGPD (UE) 2016/679</strong> y la <strong>LOPDGDD</strong>.
+      Este sitio <strong>no utiliza cookies</strong> ni tecnologías de rastreo. Sí emplea
+      el almacenamiento local del navegador para recordar a qué mensajes has dado
+      «me gusta», un uso estrictamente necesario que no requiere consentimiento previo.
+    </p>
+  </div>
+
+  <!-- 7. Legislación -->
+  <div class="card">
+    <h2>⚖️ 7. Legislación aplicable</h2>
+    <p>Este aviso legal se rige por la legislación española y europea vigente, en particular la Ley 34/2002 (LSSI-CE), el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD).</p>
+    <p style="margin-top:.75rem">Para cualquier controversia, las partes se someten a los <strong>Juzgados y Tribunales de Valencia (España)</strong>.</p>
+  </div>
+
+  <div class="update-box">
+    <strong>Aviso Legal de SinFiltro</strong> · Versión 1.1 · Agosto 2026<br>
+    El titular se reserva el derecho a modificar este aviso en cualquier momento.
+  </div>
+
+</main>
+
+
+<footer>
+  <p>© <span id="year">2026</span> SinFiltro ·
+    <a href="index.html">Inicio</a> ·
+    <a href="aviso-legal.html">Aviso Legal</a> ·
+    <a href="politica-privacidad.html">Política de Privacidad</a>
+  </p>
+</footer>
+
+<script>
+  (function(){try{var y=document.getElementById('year');if(y)y.textContent=new Date().getFullYear();}catch(e){}})();
+</script>
+
+</body>
+</html>

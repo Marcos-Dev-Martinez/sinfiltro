@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SinFiltro</title>
+  <meta name="theme-color" content="#0d0d0d">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <style>
+    /* Inter servida desde este mismo dominio, no desde Google Fonts:
+       así el navegador del visitante no conecta con servidores de Google
+       ni les envía su IP. Licencia SIL Open Font 1.1 (ver fonts/). */
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url('fonts/inter-variable-latin.woff2') format('woff2');
+    }
+    :root {
+      --bg:      #0d0d0d;
+      --surface: #1a1a1a;
+      --surface2:#222;
+      --border:  #2e2e2e;
+      --verde:   #4CAF50;
+      --rojo:    #e74c3c;
+      --texto:   #e0e0e0;
+      --muted:   #888;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      /* Evita que el teclado móvil rompa el layout */
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 20px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+      margin-top: 4px;
+    }
+
+    .online-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+      background: rgba(76,175,80,0.1);
+      border: 1px solid rgba(76,175,80,0.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      color: #6fcf72;
+    }
+
+    .online-dot {
+      width: 7px; height: 7px;
+      background: #4CAF50;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulseGreen 2s ease infinite;
+    }
+
+    @keyframes pulseGreen {
+      0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.5); }
+      50%      { box-shadow: 0 0 0 5px rgba(76,175,80,0); }
+    }
+
+    /* ── CONTENEDOR ── */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 14px 80px;
+    }
+
+    /* ── FORMULARIO ── */
+    .form-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 28px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--texto);
+      font-family: inherit;
+      font-size: 1rem; /* mínimo 16px para evitar zoom en iOS */
+      padding: 12px 14px;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    textarea:focus { border-color: #555; }
+
+    .contador {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: right;
+      margin-top: 5px;
+    }
+
+    .contador.limite { color: var(--rojo); }
+
+    .form-fila {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--texto);
+      font-family: inherit;
+      font-size: 1rem; /* mínimo 16px → no hace zoom en iOS */
+      padding: 11px 14px;
+      outline: none;
+      min-width: 0;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus { border-color: #555; }
+
+    button.publicar {
+      background: var(--verde);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      /* área táctil cómoda */
+      min-height: 44px;
+    }
+
+    button.publicar:active { transform: scale(0.96); background: #43a047; }
+
+    /* ── HUMOR DEL DÍA ── */
+    .humor-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid #6c63ff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .humor-emoji { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+
+    .humor-content { flex: 1; }
+
+    .humor-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #6c63ff;
+      margin-bottom: 4px;
+    }
+
+    .humor-texto {
+      font-size: 0.92rem;
+      color: var(--texto);
+      line-height: 1.5;
+    }
+
+    .humor-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 8px;
+      padding: 0;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+
+    .humor-btn:hover { color: var(--texto); }
+
+    /* ── MENSAJES ── */
+    .mensajes-titulo {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* ── POST ── */
+    .post {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+      /* animación entrada */
+      animation: slideIn 0.25s ease both;
+    }
+
+    @keyframes slideIn {
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .post:active { border-color: #3a3a3a; }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+
+    .post-alias {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #ccc;
+      /* recorta alias muy largos */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 55%;
+    }
+
+    .post-fecha {
+      font-size: 0.72rem;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .post-texto {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--texto);
+      word-break: break-word;
+      margin-bottom: 12px;
+    }
+
+    .post-footer {
+      display: flex;
+      align-items: center;
+    }
+
+    .like-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      /* área táctil mínima recomendada: 44px */
+      min-height: 36px;
+      padding: 0 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .like-btn:active    { transform: scale(0.93); }
+    .like-btn:hover     { border-color: #e74c3c; color: #e74c3c; }
+    .like-btn.liked     { border-color: #e74c3c; color: #e74c3c; background: rgba(231,76,60,0.08); }
+
+    /* ── REDES ── */
+    .redes {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 16px;
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .redes a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+      /* área táctil */
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .redes a:hover, .redes a:active { color: var(--texto); background: var(--surface); }
+
+    /* ── AVISO ── */
+    .aviso {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-top: 32px;
+      padding: 0 8px 20px;
+      line-height: 1.65;
+    }
+
+    /* ── LEGAL ── */
+    .legal {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-bottom: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .legal a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding: 6px 4px;
+    }
+    .legal a:hover { color: var(--texto); }
+
+    /* Foco visible con el teclado (WCAG 2.4.7) */
+    a:focus-visible, button:focus-visible,
+    textarea:focus-visible, input:focus-visible {
+      outline: 3px solid #8b84ff;
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #222;
+      border: 1px solid var(--border);
+      color: var(--texto);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE EXTRA ── */
+    @media (max-width: 380px) {
+      .container { padding: 16px 10px 80px; }
+      .form-box  { padding: 13px; }
+      button.publicar { padding: 11px 14px; font-size: 0.88rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>SinFiltro</h1>
+  <p>Escribe lo que sientes, sin que nadie te juzgue</p>
+  <div class="online-badge" id="onlineBadge">
+    <span class="online-dot" aria-hidden="true"></span>
+    <span id="onlineCount">1</span>&nbsp;<span id="onlineLabel">persona online</span>
+  </div>
+</header>
+
+<noscript>
+  <div style="max-width:600px;margin:20px auto;padding:14px 16px;background:#1a1a1a;border:1px solid #2e2e2e;border-left:3px solid #6c63ff;border-radius:12px;color:#e0e0e0;font-size:0.9rem;line-height:1.6">
+    SinFiltro necesita JavaScript para mostrar y publicar mensajes. Actívalo para poder usarlo.
+  </div>
+</noscript>
+
+<main class="container">
+
+  <!-- FORMULARIO -->
+  <div class="form-box">
+    <textarea id="mensaje" placeholder="¿Qué quieres decir hoy?" maxlength="200" autocomplete="off" autocorrect="on" spellcheck="true"></textarea>
+    <div class="contador" id="contador">0 / 200</div>
+    <div class="form-fila">
+      <input type="text" id="alias" placeholder="Alias (opcional)" maxlength="15" autocomplete="off" autocorrect="off" autocapitalize="none">
+      <button class="publicar" onclick="publicar()">Publicar</button>
+    </div>
+  </div>
+
+  <!-- HUMOR DEL DÍA -->
+  <div class="humor-box" id="humorBox">
+    <div class="humor-emoji" id="humorEmoji">💬</div>
+    <div class="humor-content">
+      <div class="humor-label">Frase del momento</div>
+      <div class="humor-texto" id="humorTexto">Cargando…</div>
+      <button class="humor-btn" onclick="nuevaFrase()">↻ Otra frase</button>
+    </div>
+  </div>
+
+  <!-- MENSAJES -->
+  <div class="mensajes-titulo">Mensajes de la comunidad</div>
+  <div id="posts"></div>
+
+  <!-- REDES -->
+  <!-- OJO: estos tres enlaces siguen apuntando a "#" y no llevan a ninguna
+       parte. Ponles la URL real de tus perfiles o quítalos: un enlace muerto
+       da peor impresión que no tenerlo. -->
+  <div class="redes">
+    <a href="#">📸 Instagram</a>
+    <a href="#">🎮 Discord</a>
+    <a href="#">🎵 TikTok</a>
+  </div>
+
+  <!-- AVISO -->
+  <div class="aviso">
+    Esta página no sustituye ayuda profesional.<br>
+    Si estás pasando por un momento difícil, habla con alguien de confianza o un profesional.<br>
+    En España, el <strong>teléfono 024</strong> es gratuito, confidencial y atiende las 24 horas.
+  </div>
+
+  <!-- LEGAL -->
+  <div class="legal">
+    <a href="aviso-legal.html">Aviso Legal</a>
+    <span aria-hidden="true">·</span>
+    <a href="politica-privacidad.html">Política de Privacidad</a>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── FIREBASE ──
+  const firebaseConfig = {
+    apiKey: "AIzaSyCz2XVcHzhJENow06arYYqM5frDPdYqIzE",
+    authDomain: "sinfiltro-5fe3b.firebaseapp.com",
+    projectId: "sinfiltro-5fe3b",
+    storageBucket: "sinfiltro-5fe3b.firebasestorage.app",
+    messagingSenderId: "151301944946",
+    appId: "1:151301944946:web:ada5fdbd94ee11f0f034eb"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // ── FRASES DEL MOMENTO ──
+  const frases = [
+    { texto: "No tienes que estar bien todo el tiempo.", emoji: "🌧️" },
+    { texto: "Está bien no saber qué decir. A veces el silencio también habla.", emoji: "🤫" },
+    { texto: "Cada persona lleva una historia que no se ve.", emoji: "📖" },
+    { texto: "Hoy puede ser un mal día, pero no una mala vida.", emoji: "🌱" },
+    { texto: "Escribir lo que sientes ya es un paso valiente.", emoji: "✍️" },
+    { texto: "No compitas con nadie. Tu camino es tuyo.", emoji: "🛤️" },
+    { texto: "La gente que parece bien también tiene días difíciles.", emoji: "🎭" },
+    { texto: "No necesitas tenerlo todo resuelto ahora mismo.", emoji: "⏳" },
+    { texto: "Pedir ayuda no es debilidad, es inteligencia emocional.", emoji: "🤝" },
+    { texto: "Tus sentimientos son válidos aunque no los entiendas tú mismo.", emoji: "💙" },
+    { texto: "Descansar también es avanzar.", emoji: "☁️" },
+    { texto: "No todo lo que piensas es verdad. El cerebro a veces miente.", emoji: "🧠" },
+  ];
+
+  let lastFraseIdx = -1;
+
+  function nuevaFrase() {
+    let idx;
+    do { idx = Math.floor(Math.random() * frases.length); } while (idx === lastFraseIdx);
+    lastFraseIdx = idx;
+    const f = frases[idx];
+    document.getElementById('humorTexto').textContent = f.texto;
+    document.getElementById('humorEmoji').textContent  = f.emoji;
+  }
+
+  nuevaFrase();
+
+  // ── TOAST ──
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── CONTADOR ──
+  document.getElementById("mensaje").addEventListener("input", function() {
+    const len = this.value.length;
+    const el  = document.getElementById("contador");
+    el.textContent = len + " / 200";
+    el.classList.toggle("limite", len >= 180);
+  });
+
+  // ── FILTROS ──
+  const palabrasProhibidas = [
+    "puta", "mierda", "idiota", "imbécil", "imbecil", "gilipollas",
+    "capullo", "cabrón", "cabron", "zorra", "subnormal", "retrasado",
+    "bastardo", "maricón", "maricon", "puto", "hostia", "joder",
+    "cojones", "coño", "polla", "culo", "hijo de puta", "hdp",
+    "estúpido", "estupido", "inútil", "inutil", "animal", "pedazo de mierda",
+    "negro de mierda", "vete a la mierda", "muérete", "muerate"
+  ];
+  const aliasProhibidos = [
+    "admin", "moderador", "owner", "staff", "mod", "soporte",
+    "support", "sistema", "system", "bot", "official", "oficial",
+    "sinfiltro", "root", "superadmin", "administrador"
+  ];
+
+  function textoValido(t)  { return !palabrasProhibidas.some(p => t.toLowerCase().includes(p)); }
+  function aliasValido(a)  {
+    if (a.length > 15) return false;
+    if (aliasProhibidos.includes(a.toLowerCase())) return false;
+    return true;
+  }
+
+  // ── FECHA ──
+  function fechaLegible(ts) {
+    const d = new Date(ts);
+    return d.toLocaleDateString('es-ES', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+  }
+
+  // ── PUBLICAR ──
+  function publicar() {
+    const mensaje = document.getElementById("mensaje").value.trim();
+    let   alias   = document.getElementById("alias").value.trim() || "Anónimo";
+
+    if (!mensaje)             return toast("Escribe algo primero");
+    if (mensaje.length > 200) return toast("Mensaje demasiado largo");
+    if (!textoValido(mensaje)) return toast("Mensaje no permitido 🚫");
+    if (!aliasValido(alias))   return toast("Alias no permitido 🚫");
+
+    alias = alias.replace(/[^a-zA-Z0-9 ]/g, "");
+
+    db.collection("mensajes").add({
+      texto: mensaje,
+      alias: alias,
+      fecha: Date.now(),
+      likes: 0
+    }).then(() => {
+      document.getElementById("mensaje").value = "";
+      document.getElementById("alias").value   = "";
+      document.getElementById("contador").textContent = "0 / 200";
+      toast("¡Publicado! ✓");
+      // cierra teclado en móvil
+      document.activeElement.blur();
+    });
+  }
+
+  // ── MOSTRAR MENSAJES ──
+  db.collection("mensajes").orderBy("fecha", "desc").onSnapshot(snapshot => {
+    document.getElementById("posts").innerHTML = "";
+
+    snapshot.forEach(doc => {
+      const data      = doc.data();
+      const yaDioLike = localStorage.getItem(doc.id);
+
+      const post = document.createElement("div");
+      post.className = "post";
+
+      // ─────────────────────────────────────────────────────────────
+      // IMPORTANTE: el alias y el texto los escribe cualquiera que
+      // entre en la web. Antes se metían con innerHTML, así que un
+      // mensaje con HTML dentro se ejecutaba en el navegador de todos
+      // los visitantes. Ahora se insertan con textContent, que trata
+      // el contenido como texto plano y nunca como código.
+      // No cambies esto por innerHTML.
+      // ─────────────────────────────────────────────────────────────
+      const cabecera = document.createElement("div");
+      cabecera.className = "post-header";
+
+      const spanAlias = document.createElement("span");
+      spanAlias.className = "post-alias";
+      spanAlias.textContent = data.alias || "Anónimo";
+
+      const spanFecha = document.createElement("span");
+      spanFecha.className = "post-fecha";
+      spanFecha.textContent = fechaLegible(data.fecha);
+
+      cabecera.append(spanAlias, spanFecha);
+
+      const cuerpo = document.createElement("div");
+      cuerpo.className = "post-texto";
+      cuerpo.textContent = data.texto || "";
+
+      const pie = document.createElement("div");
+      pie.className = "post-footer";
+
+      const btnLike = document.createElement("button");
+      btnLike.className = "like-btn" + (yaDioLike ? " liked" : "");
+      btnLike.type = "button";
+      const nLikes = data.likes || 0;
+      btnLike.setAttribute("aria-pressed", yaDioLike ? "true" : "false");
+      btnLike.setAttribute("aria-label", "Me gusta. " + nLikes + (nLikes === 1 ? " persona" : " personas"));
+
+      const spanCorazon = document.createElement("span");
+      spanCorazon.setAttribute("aria-hidden", "true");
+      spanCorazon.textContent = "❤️";
+
+      const spanNum = document.createElement("span");
+      spanNum.textContent = nLikes;
+
+      btnLike.append(spanCorazon, " ", spanNum);
+      pie.appendChild(btnLike);
+
+      post.append(cabecera, cuerpo, pie);
+
+      btnLike.onclick = () => {
+        if (localStorage.getItem(doc.id)) { toast("Ya diste like a este mensaje"); return; }
+        db.collection("mensajes").doc(doc.id).update({ likes: (data.likes || 0) + 1 });
+        localStorage.setItem(doc.id, true);
+      };
+
+      document.getElementById("posts").appendChild(post);
+    });
+  });
+
+  // ── CONTADOR ONLINE ──
+  const sessionId = Math.random().toString(36).slice(2);
+  const presRef   = db.collection("presencia").doc(sessionId);
+
+  presRef.set({ ts: Date.now() });
+  setInterval(() => presRef.set({ ts: Date.now() }), 30000);
+  window.addEventListener("beforeunload", () => presRef.delete());
+
+  function actualizarOnline() {
+    const limite = Date.now() - 2 * 60 * 1000;
+    db.collection("presencia").get().then(snap => {
+      let activos = 0;
+      snap.forEach(doc => {
+        if (doc.data().ts > limite) activos++;
+        else doc.ref.delete();
+      });
+      // OJO: antes esto buscaba la etiqueta con querySelector("span:last-child").
+      // En CSS, :last-child solo cuenta ELEMENTOS, y el texto suelto que había
+      // aquí no lo es, así que ese selector apuntaba al número y lo machacaba:
+      // se veía "personas online persona online" y el contador desaparecía.
+      // Ahora la etiqueta tiene su propio id y no hay forma de confundirlos.
+      const el    = document.getElementById("onlineCount");
+      const label = document.getElementById("onlineLabel");
+      if (el)    el.textContent = activos;
+      if (label) label.textContent = (activos === 1 ? "persona online" : "personas online");
+    });
+  }
+
+  actualizarOnline();
+  setInterval(actualizarOnline, 30000);
+</script>
+
+</body>
+</html>

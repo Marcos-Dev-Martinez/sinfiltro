@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Política de Privacidad de SinFiltro. Los mensajes son anónimos y públicos; no se piden datos personales.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0d0d0d">
+  <title>Política de Privacidad — SinFiltro</title>
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url('fonts/inter-variable-latin.woff2') format('woff2');
+    }
+    :root {
+      --bg:       #0d0d0d;
+      --surface:  #1a1a1a;
+      --surface2: #222;
+      --border:   #2e2e2e;
+      --texto:    #e0e0e0;
+      --muted:    #888;
+      --morado:   #8b84ff;
+      --morado-b: #6c63ff;
+      --verde:    #4CAF50;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body {
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.7;
+    }
+    a { color: var(--morado); }
+    a:hover { color: var(--texto); }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--morado);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+    .skip-link {
+      position:absolute; left:50%; top:0;
+      transform: translate(-50%,-120%);
+      background: var(--morado-b); color:#fff;
+      font-weight:600; font-size:0.9rem;
+      padding:.75rem 1.5rem; border-radius:0 0 10px 10px;
+      text-decoration:none; z-index:200; transition:transform .2s;
+    }
+    .skip-link:focus { transform: translate(-50%,0); color:#fff; }
+
+    header {
+      border-bottom:1px solid var(--border);
+      padding:24px 20px 20px; text-align:center;
+      position:sticky; top:0; background:var(--bg); z-index:10;
+    }
+    header .marca {
+      font-size:1.05rem; font-weight:700; letter-spacing:-0.3px;
+      color:var(--texto); text-decoration:none; display:inline-block;
+    }
+    header .volver {
+      display:block; margin-top:6px;
+      font-size:0.82rem; color:var(--muted); text-decoration:none;
+    }
+    header .volver:hover { color:var(--texto); }
+
+    .hero { max-width:760px; margin:0 auto; padding:36px 16px 8px; }
+    .hero-label {
+      font-size:0.7rem; font-weight:600; letter-spacing:1.5px;
+      text-transform:uppercase; color:var(--morado); margin-bottom:8px;
+    }
+    .hero h1 { font-size:clamp(1.7rem,6vw,2.3rem); font-weight:700; letter-spacing:-0.5px; }
+    .hero p { color:var(--muted); font-size:0.86rem; margin-top:8px; }
+
+    main { max-width:760px; margin:0 auto; padding:20px 16px 60px; }
+
+    .card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:20px 22px; margin-bottom:14px;
+    }
+    .card h2 {
+      font-size:1.02rem; font-weight:700; color:var(--morado);
+      margin-bottom:14px; padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .card h3 { font-size:0.92rem; font-weight:600; margin:16px 0 5px; color:var(--texto); }
+    .card p, .card li { font-size:0.9rem; color:var(--muted); }
+    .card ul { padding-left:1.3rem; margin-top:.5rem; }
+    .card li { margin-bottom:.35rem; }
+    .card strong { color:var(--texto); }
+    .card code {
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:.85em; background:var(--surface2);
+      border:1px solid var(--border); border-radius:5px;
+      padding:.1em .38em; color:var(--morado);
+    }
+    .destacado {
+      background:rgba(108,99,255,0.10);
+      border-left:3px solid var(--morado-b);
+      border-radius:0 10px 10px 0;
+      padding:.9rem 1.15rem; margin:1rem 0;
+      font-size:.88rem; color:var(--muted);
+    }
+    .destacado strong { color:var(--texto); }
+    .ayuda {
+      background:rgba(76,175,80,0.09);
+      border-left:3px solid var(--verde);
+      border-radius:0 10px 10px 0;
+      padding:.9rem 1.15rem; margin:1rem 0;
+      font-size:.88rem; color:var(--muted);
+    }
+    .ayuda strong { color:var(--texto); }
+
+    .update-box {
+      text-align:center; padding:18px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; font-size:.8rem; color:var(--muted); margin-top:22px;
+    }
+    footer {
+      text-align:center; padding:26px 16px;
+      font-size:.78rem; color:var(--muted);
+      border-top:1px solid var(--border);
+    }
+    footer a { color:var(--muted); text-decoration:underline; text-underline-offset:3px; padding:4px; }
+    footer a:hover { color:var(--texto); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { transition-duration:.01ms !important; animation-duration:.01ms !important; }
+    }
+    @media (max-width:600px) {
+      .card { padding:16px; }
+      main { padding:16px 12px 48px; }
+      .hero { padding:28px 12px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#contenido" class="skip-link">Saltar al contenido principal</a>
+
+<header>
+  <a href="index.html" class="marca">SinFiltro</a>
+  <a href="index.html" class="volver">← Volver al inicio</a>
+</header>
+<div class="hero">
+  <p class="hero-label">Legal</p>
+  <h1>Política de Privacidad</h1>
+  <p>Última actualización: agosto de 2026 · Conforme al Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD)</p>
+</div>
+
+<main id="contenido">
+
+  <div class="card">
+    <h2>💙 Antes de nada</h2>
+    <div class="destacado">
+      <strong>Lo que escribas en SinFiltro se publica de forma pública.</strong>
+      Cualquiera puede leerlo, no hace falta registrarse para verlo. Por eso te
+      pedimos que <strong>no incluyas datos que permitan identificarte</strong>
+      —ni a ti ni a otras personas—: nombres y apellidos, teléfonos, direcciones,
+      correos, tu instituto o tu trabajo.
+    </div>
+    <p>
+      El campo <strong>Alias</strong> es opcional y también se publica. Si lo dejas
+      vacío, tu mensaje aparece como «Anónimo». Nuestro consejo: usa un apodo que
+      no sea tu nombre real.
+    </p>
+    <div class="ayuda">
+      SinFiltro es un espacio para desahogarse, no un servicio de atención.
+      <strong>No sustituye la ayuda profesional.</strong> Si estás pasando por un
+      momento difícil, habla con alguien de confianza o con un profesional. En
+      España, el <strong>teléfono 024</strong> de atención a la conducta suicida es
+      gratuito, confidencial y funciona las 24 horas.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧑‍💼 1. Responsable del tratamiento</h2>
+    <p>En cumplimiento del artículo 13 del <strong>RGPD</strong>:</p>
+    <div class="destacado">
+      <strong>Identidad:</strong> Marcos Martínez<br>
+      <strong>Correo electrónico:</strong> <a href="mailto:marcos.dev.martinez@gmail.com">marcos.dev.martinez@gmail.com</a><br>
+      <strong>Ubicación:</strong> Valencia, España<br>
+      <strong>Naturaleza:</strong> Persona física — proyecto personal sin actividad comercial
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 2. Qué datos se recogen</h2>
+    <p>SinFiltro <strong>no pide registro, ni nombre, ni correo electrónico</strong>. No hay cuentas de usuario ni contraseñas.</p>
+
+    <h3>Lo que se guarda al publicar un mensaje:</h3>
+    <ul>
+      <li><strong>El texto del mensaje</strong>, tal y como lo escribes (máximo 200 caracteres).</li>
+      <li><strong>El alias</strong> que indiques, o «Anónimo» si lo dejas vacío.</li>
+      <li><strong>La fecha y hora</strong> de publicación.</li>
+      <li><strong>El número de «me gusta»</strong> que acumula el mensaje.</li>
+    </ul>
+
+    <h3>Contador de personas conectadas:</h3>
+    <p>
+      Para mostrar cuánta gente hay en la web en cada momento, el navegador genera un
+      <strong>identificador aleatorio de sesión</strong> —no vinculado a ti ni a tu
+      dispositivo— y guarda junto a él la hora. Ese registro se
+      <strong>borra automáticamente</strong> a los dos minutos de inactividad, y
+      también al cerrar la pestaña.
+    </p>
+
+    <h3>Datos técnicos del proveedor:</h3>
+    <p>
+      El sitio y su base de datos están en <strong>Firebase</strong> (Google Ireland
+      Limited), que registra automáticamente datos técnicos de conexión como la
+      dirección IP, con fines de seguridad y funcionamiento. Ese registro pertenece al
+      proveedor, no se usa para identificar a nadie y no se cruza con los mensajes.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🍪 3. Almacenamiento en tu navegador</h2>
+    <p>
+      Este sitio <strong>no utiliza cookies</strong> de ningún tipo: ni propias, ni de
+      terceros, ni analíticas, ni publicitarias.
+    </p>
+    <p style="margin-top:.75rem">
+      Sí utiliza <code>localStorage</code>, el almacenamiento local del navegador, con
+      un único propósito: <strong>recordar a qué mensajes ya le has dado «me gusta»</strong>,
+      para que no puedas contarlo dos veces. Se guarda solo el identificador del mensaje,
+      nunca información sobre ti.
+    </p>
+    <div class="destacado">
+      Ese dato <strong>no sale de tu dispositivo</strong>: no se envía a ningún servidor
+      ni se comparte con nadie. Puedes borrarlo cuando quieras desde las opciones de tu
+      navegador («borrar datos de sitios»).
+    </div>
+    <p>
+      Al tratarse de almacenamiento <strong>estrictamente necesario</strong> para una
+      función que tú mismo solicitas al pulsar «me gusta», queda amparado por la
+      excepción del <strong>artículo 22.2 de la LSSI-CE</strong> y no requiere
+      consentimiento previo. Por eso no verás ningún banner.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🔐 4. Sobre lo que puedas escribir tú</h2>
+    <p>
+      Por la naturaleza de este espacio, un mensaje puede contener información sobre tu
+      estado de ánimo o tu salud. El <strong>artículo 9 del RGPD</strong> considera los
+      datos de salud una <strong>categoría especial</strong>, con protección reforzada.
+    </p>
+    <p style="margin-top:.75rem">
+      SinFiltro <strong>no solicita</strong> ese tipo de información ni la trata de forma
+      deliberada: no se analiza el contenido de los mensajes, no se elaboran perfiles y
+      no se intenta identificar a quien escribe. Si decides incluir información de ese
+      tipo, lo haces de forma voluntaria y con <strong>consentimiento explícito</strong>
+      (art. 9.2.a del RGPD), que prestas al pulsar «Publicar».
+    </p>
+    <div class="destacado">
+      Nuestra recomendación es la contraria: <strong>escribe lo que sientas, pero sin
+      datos que te identifiquen</strong>. Cuanto menos identificable sea el mensaje, más
+      protegido estás.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 5. Para qué se usan y con qué base legal</h2>
+    <p><strong>Finalidad:</strong> publicar tu mensaje en el muro común para que otras personas puedan leerlo, y mostrar cuántas personas están conectadas. Nada más.</p>
+    <p style="margin-top:.75rem"><strong>Base jurídica:</strong> tu <strong>consentimiento</strong> (art. 6.1.a del RGPD), que prestas al escribir el mensaje y pulsar «Publicar».</p>
+    <p style="margin-top:.75rem">
+      <strong>No</strong> se elaboran perfiles, <strong>no</strong> se toman decisiones
+      automatizadas, <strong>no</strong> hay publicidad y los mensajes <strong>no</strong>
+      se utilizan para ningún otro fin.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🗓️ 6. Cuánto tiempo se conservan</h2>
+    <p>
+      Los mensajes permanecen publicados mientras el proyecto siga activo, salvo que se
+      solicite su supresión o que se retiren por moderación. Los registros del contador
+      de personas conectadas se borran solos a los dos minutos. Si el proyecto se cierra,
+      se elimina todo.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🔒 7. Quién más ve estos datos</h2>
+    <p><strong>Los mensajes son públicos por diseño:</strong> cualquier visitante puede leerlos. Tenlo presente antes de publicar.</p>
+    <p style="margin-top:.75rem">
+      Más allá de eso, los datos <strong>no se ceden a terceros</strong> salvo obligación
+      legal. El alojamiento y la base de datos corren a cargo de <strong>Firebase</strong>
+      (Google Ireland Limited), que actúa como <strong>encargado del tratamiento</strong>
+      conforme al artículo 28 del RGPD.
+    </p>
+    <div class="destacado">
+      <strong>Transferencias internacionales:</strong> Google puede tratar datos fuera del
+      Espacio Económico Europeo, amparándose en las <strong>cláusulas contractuales
+      tipo</strong> aprobadas por la Comisión Europea (art. 46.2.c del RGPD). Además, la
+      web carga las librerías de Firebase desde servidores de Google
+      (<code>gstatic.com</code>), lo que implica una conexión de tu navegador con Google
+      necesaria para que el sitio funcione.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>✅ 8. Tus derechos</h2>
+    <p>Puedes ejercer los derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición previstos en el RGPD.</p>
+    <div class="destacado">
+      <strong>Para pedir que se borre un mensaje</strong>, escribe a
+      <a href="mailto:marcos.dev.martinez@gmail.com">marcos.dev.martinez@gmail.com</a>
+      indicando el <strong>texto exacto del mensaje</strong> y, si puedes, la fecha
+      aproximada. Como las publicaciones son anónimas y no hay cuentas, es la única forma
+      de localizarlo. Se atenderá en un plazo máximo de <strong>30 días</strong>.
+    </div>
+    <p>
+      No se te pedirá que acredites tu identidad para borrar un mensaje anónimo: hacerlo
+      supondría recoger más datos tuyos de los que hay ahora mismo.
+    </p>
+    <p style="margin-top:.75rem">
+      Si consideras que el tratamiento no se ajusta a la normativa, puedes reclamar ante la
+      <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer"><strong>Agencia Española de Protección de Datos (AEPD)</strong></a>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🛡️ 9. Moderación y contenidos</h2>
+    <p>El sitio aplica un filtro automático de lenguaje ofensivo y de alias reservados. Además, se retirarán los mensajes que:</p>
+    <ul>
+      <li>Identifiquen a terceros o revelen datos personales de otras personas.</li>
+      <li>Contengan insultos, acoso, amenazas o incitación al odio.</li>
+      <li>Promuevan conductas autolesivas o den instrucciones para llevarlas a cabo.</li>
+      <li>Sean publicidad, spam o suplantación de identidad.</li>
+    </ul>
+    <p style="margin-top:.75rem">
+      Puedes avisar de un mensaje que incumpla lo anterior escribiendo a
+      <a href="mailto:marcos.dev.martinez@gmail.com">marcos.dev.martinez@gmail.com</a>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>👤 10. Menores de edad</h2>
+    <p>
+      Conforme al artículo 7 de la <strong>LOPDGDD</strong>, el tratamiento de datos de
+      menores de <strong>14 años</strong> basado en el consentimiento requiere la
+      autorización de sus padres o tutores. Si eres menor de 14 años, no publiques
+      mensajes en este sitio sin el permiso de un adulto responsable.
+    </p>
+  </div>
+
+  <div class="update-box">
+    <strong>Política de Privacidad de SinFiltro</strong> · Versión 1.1 · Agosto 2026<br>
+    Esta política puede actualizarse. La fecha de última revisión se indica en la cabecera.
+  </div>
+
+</main>
+
+<footer>
+  <p>© <span id="year">2026</span> SinFiltro ·
+    <a href="index.html">Inicio</a> ·
+    <a href="aviso-legal.html">Aviso Legal</a> ·
+    <a href="politica-privacidad.html">Política de Privacidad</a>
+  </p>
+</footer>
+
+<script>
+  (function(){try{var y=document.getElementById('year');if(y)y.textContent=new Date().getFullYear();}catch(e){}})();
+</script>
+
+</body>
+</html>

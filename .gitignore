@@ -1,0 +1,19 @@
+# Caché de despliegue de Firebase — no tiene sentido compartirla
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+
+# Dependencias, si algún día las usas
+node_modules/
+
+# Basura del sistema operativo
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
